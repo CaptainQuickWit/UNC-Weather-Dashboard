@@ -125,6 +125,16 @@ function render(data, dataType, target, text) {
     }
       
       break;
+
+      case 'uv':
+      if (data < 5) {
+        target.append($('<h3>').text(`${text}: `+ data).addClass('low'));
+      } else if (data < 10) {
+        target.append($('<h3>').text(`${text}: `+ data).addClass('moderate'));
+      } else if (data >= 10) {
+        target.append($('<h3>').text(`${text}: `+ data).addClass('high'));
+      }
+        break;
   }
 }
 
@@ -162,7 +172,8 @@ function fetchWeather(input) {
           render (tempLo, 'stats', currentForecastCard, "Temperature Low");
           render (humidity, 'stats', currentForecastCard, "Humidity");
           render (windSpeed, 'stats', currentForecastCard, "Wind Speed");
-          render (uvi, 'stats', currentForecastCard, "UV");
+          render (uvi, 'uv', currentForecastCard, "UV");
+
 
           for (var i = 1; i < 6; i++) {
 
