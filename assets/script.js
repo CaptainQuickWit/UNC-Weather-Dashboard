@@ -19,8 +19,6 @@ function helperFetchUVImg (getUVURL) {
         );
 }
 
-
-
 searchBtn.on("click", function(event) {
   userInput = userInputEle.val();
   console.log('userInput==>'+userInput);
@@ -29,19 +27,7 @@ searchBtn.on("click", function(event) {
   
 });
 
-function render(data, dataType, target) {
 
-  switch(dataType) {
-    case 'stats':
-      target.append($('<h3>').text(data));
-      //return $('<h3>').text(data);
-      
-    case 'img' :
-
-      break;
-  }
-
-}
 
 /**
  * 
@@ -62,19 +48,17 @@ function fetchData (data, index) {
   return {date,tempHi,tempLo,humidity,wind,uvi,weatherImg, humidity,windSpeed, uvi};
 }
 
-function helperFetchCoord(currentForcastUrl) {
-  fetch(currentForcastUrl)
-    .then(response => response.json())
-    .then(function (response) {
-      console.log('response ==>'+response);
-      var cityName = response.name;
-      // Creates a button with the name and values of the searched city
-      var lat = response.coord.lat;
-      var lon = response.coord.lat;
-      return {cityName, lat, lon};
-      // Sets the API call url to the variable oneCallUrl in order to get the weather data for the searched city
+function render(data, dataType, target, text) {
 
-    });
+  switch(dataType) {
+    case 'stats':
+      ele = $('<h3>').text(`${text}: `+ data);
+      target.append(ele);
+      //return $('<h3>').text(data);
+    case 'img' :
+
+      break;
+  }
 
 }
 
@@ -88,21 +72,16 @@ function helperFetchCoord(currentForcastUrl) {
 function fetchWeather(input) {
 
   let URL = "https://api.openweathermap.org/data/2.5/weather?q=" + input + "&appid=" + APIKey;
-  //let { lat, lon } = helperFetchCoord(URL);
-    //let getUVURL = "https://api.openweathermap.org/data/2.5/uvi/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&cnt=1";
-    //helperFetchUVImg(getUVURL);
-  // Starts the fetch request to the URL set in the oneCallUrl variable
 
     fetch(URL)
     .then(response => response.json())
     .then(function (data) {
       console.log('data ==>'+data);
       
-      // Creates a button with the name and values of the searched city
-      //createCityButtons(response.name);
-
       // Sets the API call url to the variable oneCallUrl in order to get the weather data for the searched city
       var URL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + data.coord.lat + "&lon=" + data.coord.lat + "&appid=" + APIKey + "&units=imperial";
+
+     // helperFetchUVImg(getUVURL);
 
       // Starts the fetch request to the URL set in the oneCallUrl variable
       fetch(URL)
@@ -113,24 +92,34 @@ function fetchWeather(input) {
 
           var weatherObj = fetchData(data,0);
           let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
-          render (date, 'stats', currentForecastCard);
-          render (weatherImg, 'img', currentForecastCard);
-          render (tempHi, 'stats', currentForecastCard);
-          render (tempLo, 'stats', currentForecastCard);
-          render (humidity, 'stats', currentForecastCard);
-          render (windSpeed, 'stats', currentForecastCard);
-          render (uvi, 'stats', currentForecastCard);
 
-          for (var i = 1; i < 5; i++) {
+          var currentForecastCardDiv = $('<div>');
+          currentForecastCardDiv.append($('<h1>').text(data.name));
+          currentForecastCardDiv.append(moment.unix(date).format('dddd MMM Do'));
+          currentForecastCard.append(currentForecastCardDiv);
 
+          render (tempHi, 'stats', currentForecastCard, "Temperature High");
+          render (tempLo, 'stats', currentForecastCard, "Temperature Low");
+          render (humidity, 'stats', currentForecastCard, "Humidity");
+          render (windSpeed, 'stats', currentForecastCard, "Wind Speed");
+          render (uvi, 'stats', currentForecastCard, "UV");
+          currentForecastCard.append(currentForecastCardDiv);
+          for (var i = 1; i < 6; i++) {
+            
             var weekForecastCardDayOfCard = $('<div class = container style = "border: 5px solid red;">');
             var weatherObj = fetchData(data,i);
             let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
+
+            var weekForecastCardDiv = $('<div>');
+            weekForecastCardDiv.append($('<h1>').text(data.name));
+            weekForecastCardDiv.append(moment.unix(date).format('dddd MMM Do'));
+            weekForecastCardDayOfCard.append(currentForecastCardDiv);
+            
             render (date, 'stats', weekForecastCardDayOfCard);
             render (weatherImg, 'img', weekForecastCardDayOfCard);
-            render (tempHi, 'stats', weekForecastCardDayOfCard);
-            render (tempLo, 'stats', weekForecastCardDayOfCard);
-            render (humidity, 'stats', weekForecastCardDayOfCard);
+            render (tempHi, 'stats', weekForecastCardDayOfCard, "Temperature High");
+            render (tempLo, 'stats', weekForecastCardDayOfCard, "Temperature Low");
+            render (humidity, 'stats', weekForecastCardDayOfCard, "Humidity");
 
             weekForecastCard.append(weekForecastCardDayOfCard);
 
