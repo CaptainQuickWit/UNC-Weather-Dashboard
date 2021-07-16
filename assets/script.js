@@ -5,8 +5,20 @@ var weekForecastCard = $('#weekForecast');
 var userInputEle = $('.form-input');
 var historyEle = $('#history');
 var searchBtn = $('#search-button');
-//var weekForecastCardDayOfCard = $('<div>');
+var searchHistory = [];
 var userInput;
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  /*
+  if (localStorage.getItem("history")){
+    let history = JSON.parse(localStorage.getItem("history"));
+  } else {
+    let history = [];
+  }*/
+  getSearchHistory();
+});
+
+
 
 function helperFetchUVImg (getUVURL) {
   fetch (getUVURL)
@@ -19,18 +31,44 @@ function helperFetchUVImg (getUVURL) {
         );
 }
 
+/**
+ * event listener for submit button
+ */
 searchBtn.on("click", function(event) {
+  event.preventDefault();
   userInput = userInputEle.val();
   console.log('userInput==>'+userInput);
-  //getWeather("raleigh");
+  //getWeather(userInput);
   fetchWeather('raleigh');
-  
+  saveSearch(userInput);
+  getSearchHistory();
 });
 
+function getSearchHistory (input) {
+  var search = JSON.parse(localStorage.getItem("searchHistory"));
+  // Check if data is returned, if not exit out of the function
+  if (search !== null) {
+    for (var i = 0; i < search.length; i++) {
+      historyEle.append($('<p>').text(search[i]));
+
+    }
+  
+  } else {
+    return;
+  }
+
+}
+
+function saveSearch(input) {
+  searchHistory.push(input);
+  console.log(searchHistory);
+  // Use .setItem() to store object in storage and JSON.stringify to convert it as a string
+  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+}
 
 
 /**
- * 
+ * gets the data out from the object that has been retreived from the server
  * @param {the object of the data being fetched from the server api} data 
  * @param {the index of the loop; this function will be used multiple times} index 
  */
@@ -48,13 +86,19 @@ function fetchData (data, index) {
   return {date,tempHi,tempLo,humidity,wind,uvi,weatherImg, humidity,windSpeed, uvi};
 }
 
+/**
+ * this function renders the content on each card that is retrieved from the API
+ * @param {what needs to be rendered} data 
+ * @param {the type of info it is} dataType 
+ * @param {what to render it on} target 
+ * @param {any label to attatch to the data before its rendered} text 
+ */
 function render(data, dataType, target, text) {
 
   switch(dataType) {
     case 'stats':
       ele = $('<h3>').text(`${text}: `+ data);
       target.append(ele);
-      //return $('<h3>').text(data);
     case 'img' :
       var weatherImgEle = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + data + "@2x.png");
       target.append(weatherImgEle);
@@ -62,13 +106,26 @@ function render(data, dataType, target, text) {
     case 'date':
       var dateText = moment.unix(data).format('dddd MMM Do');
       console.log("date==>"+dateText);
-            
       var forecastDiv = $('<div>');
       forecastDiv.append($('<h1>').text(dateText));
       target.append(forecastDiv);
     break;
-  }
+    case 'history':
 
+      for (let i = 0; i < searchHistory.length; i++) {
+        const historyItem = document.createElement("input");
+        historyItem.setAttribute("type", "text");
+        historyItem.setAttribute("readonly", true);
+        historyItem.setAttribute("class", "form-control d-block bg-white");
+        historyItem.setAttribute("value", searchHistory[i]);
+        historyItem.addEventListener("click", function () {
+            getWeather(historyItem.value);
+        })
+        historyEl.append(historyItem);
+    }
+      
+      break;
+  }
 }
 
 /**
@@ -90,9 +147,6 @@ function fetchWeather(input) {
       // Sets the API call url to the variable oneCallUrl in order to get the weather data for the searched city
       var URL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + data.coord.lat + "&lon=" + data.coord.lat + "&appid=" + APIKey + "&units=imperial";
 
-     // helperFetchUVImg(getUVURL);
-
-      // Starts the fetch request to the URL set in the oneCallUrl variable
       fetch(URL)
         
           .then(response => response.json())
@@ -101,11 +155,6 @@ function fetchWeather(input) {
 
           var weatherObj = fetchData(data,0);
           let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
-          /*
-          var dateText = moment.unix(date).format('dddd MMM Do');
-          var currentForecastCardDiv = $('<div>');
-          currentForecastCardDiv.append($('<h1>').text(dateText));
-          currentForecastCard.append(currentForecastCardDiv);*/
 
           render (date, 'date', currentForecastCard, "");
           render (weatherImg, 'img', currentForecastCard, "");
@@ -114,8 +163,6 @@ function fetchWeather(input) {
           render (humidity, 'stats', currentForecastCard, "Humidity");
           render (windSpeed, 'stats', currentForecastCard, "Wind Speed");
           render (uvi, 'stats', currentForecastCard, "UV");
-          //currentForecastCard.append(currentForecastCardDiv);
-          //console.log("date==>"+dateText);
 
           for (var i = 1; i < 6; i++) {
 
@@ -123,24 +170,13 @@ function fetchWeather(input) {
             var weatherObj = fetchData(data,i);
             let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
 
-            
-
             render (date, 'date', weekForecastCardDayOfCard);
             render (weatherImg, 'img', weekForecastCardDayOfCard);
             render (tempHi, 'stats', weekForecastCardDayOfCard, "Temperature High");
             render (tempLo, 'stats', weekForecastCardDayOfCard, "Temperature Low");
             render (humidity, 'stats', weekForecastCardDayOfCard, "Humidity");
-
-
             weekForecastCard.append(weekForecastCardDayOfCard);
-
-          }
-
-          //localStorage.setItem(response.name, response.name);
-        
+          }        
         });
-
     });
-    
-
 }
