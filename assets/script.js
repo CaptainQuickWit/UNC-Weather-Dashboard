@@ -56,7 +56,8 @@ function render(data, dataType, target, text) {
       target.append(ele);
       //return $('<h3>').text(data);
     case 'img' :
-
+      var weatherImgEle = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + data + "@2x.png");
+      target.append(weatherImgEle);
       break;
   }
 
@@ -85,7 +86,7 @@ function fetchWeather(input) {
 
       // Starts the fetch request to the URL set in the oneCallUrl variable
       fetch(URL)
-        //helperFetchUVImg(getUVURL);
+        
           .then(response => response.json())
           .then(function (data) {
           console.log('data==>'+data);
@@ -98,14 +99,17 @@ function fetchWeather(input) {
           currentForecastCardDiv.append(moment.unix(date).format('dddd MMM Do'));
           currentForecastCard.append(currentForecastCardDiv);
 
+          
+          render (weatherImg, 'img', currentForecastCard, "");
           render (tempHi, 'stats', currentForecastCard, "Temperature High");
           render (tempLo, 'stats', currentForecastCard, "Temperature Low");
           render (humidity, 'stats', currentForecastCard, "Humidity");
           render (windSpeed, 'stats', currentForecastCard, "Wind Speed");
           render (uvi, 'stats', currentForecastCard, "UV");
           currentForecastCard.append(currentForecastCardDiv);
+
           for (var i = 1; i < 6; i++) {
-            
+
             var weekForecastCardDayOfCard = $('<div class = container style = "border: 5px solid red;">');
             var weatherObj = fetchData(data,i);
             let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
@@ -125,7 +129,7 @@ function fetchWeather(input) {
 
           }
 
-          localStorage.setItem(response.name, response.name);
+          //localStorage.setItem(response.name, response.name);
         
         });
 
