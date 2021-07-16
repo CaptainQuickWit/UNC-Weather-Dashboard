@@ -59,6 +59,14 @@ function render(data, dataType, target, text) {
       var weatherImgEle = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + data + "@2x.png");
       target.append(weatherImgEle);
       break;
+    case 'date':
+      var dateText = moment.unix(data).format('dddd MMM Do');
+      console.log("date==>"+dateText);
+            
+      var forecastDiv = $('<div>');
+      forecastDiv.append($('<h1>').text(dateText));
+      target.append(forecastDiv);
+    break;
   }
 
 }
@@ -93,20 +101,21 @@ function fetchWeather(input) {
 
           var weatherObj = fetchData(data,0);
           let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
-
+          /*
+          var dateText = moment.unix(date).format('dddd MMM Do');
           var currentForecastCardDiv = $('<div>');
-          currentForecastCardDiv.append($('<h1>').text(data.name));
-          currentForecastCardDiv.append(moment.unix(date).format('dddd MMM Do'));
-          currentForecastCard.append(currentForecastCardDiv);
+          currentForecastCardDiv.append($('<h1>').text(dateText));
+          currentForecastCard.append(currentForecastCardDiv);*/
 
-          
+          render (date, 'date', currentForecastCard, "");
           render (weatherImg, 'img', currentForecastCard, "");
           render (tempHi, 'stats', currentForecastCard, "Temperature High");
           render (tempLo, 'stats', currentForecastCard, "Temperature Low");
           render (humidity, 'stats', currentForecastCard, "Humidity");
           render (windSpeed, 'stats', currentForecastCard, "Wind Speed");
           render (uvi, 'stats', currentForecastCard, "UV");
-          currentForecastCard.append(currentForecastCardDiv);
+          //currentForecastCard.append(currentForecastCardDiv);
+          //console.log("date==>"+dateText);
 
           for (var i = 1; i < 6; i++) {
 
@@ -114,16 +123,14 @@ function fetchWeather(input) {
             var weatherObj = fetchData(data,i);
             let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
 
-            var weekForecastCardDiv = $('<div>');
-            weekForecastCardDiv.append($('<h1>').text(data.name));
-            weekForecastCardDiv.append(moment.unix(date).format('dddd MMM Do'));
-            weekForecastCardDayOfCard.append(currentForecastCardDiv);
             
-            render (date, 'stats', weekForecastCardDayOfCard);
+
+            render (date, 'date', weekForecastCardDayOfCard);
             render (weatherImg, 'img', weekForecastCardDayOfCard);
             render (tempHi, 'stats', weekForecastCardDayOfCard, "Temperature High");
             render (tempLo, 'stats', weekForecastCardDayOfCard, "Temperature Low");
             render (humidity, 'stats', weekForecastCardDayOfCard, "Humidity");
+
 
             weekForecastCard.append(weekForecastCardDayOfCard);
 
