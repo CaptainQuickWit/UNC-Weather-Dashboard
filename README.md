@@ -1,5 +1,7 @@
 # 06 Server-Side APIs: Weather Dashboard
 
+deployed: https://captainquickwit.github.io/UNC-Weather-Dashboard/
+
 ## Your Task
 
 Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
@@ -13,6 +15,7 @@ Screenshots:
 ![Screen Shot 2021-07-16 at 9 39 22 PM](https://user-images.githubusercontent.com/73507926/126021829-2ed0a26a-a91b-4b41-848b-7fe5298cd87c.png)
 
 ![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Atlanta.](./Assets/06-server-side-apis-homework-demo.png)
+
 
 ## Grading Requirements
 This homework is graded based on the following criteria: 
