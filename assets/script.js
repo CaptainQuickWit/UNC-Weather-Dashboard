@@ -5,6 +5,7 @@ var weekForecastCard = $('#weekForecast');
 var userInputEle = $('.form-input');
 var historyEle = $('#history');
 var searchBtn = $('#search-button');
+var locationDisEle = $('#forecastLocationDisplay');
 var searchHistory = [];
 var userInput;
 /**
@@ -34,8 +35,7 @@ function helperFetchUVImg (getUVURL) {
 searchBtn.on("click", function(event) {
 
   getSearchHistory();
-  currentForecastCard.html('');
-  weekForecastCard.html('');
+  
   event.preventDefault();
   userInput = userInputEle.val();
   console.log('userInput==>'+userInput);
@@ -160,7 +160,10 @@ function render(data, dataType, target, text) {
  * @param {what user searches as a string} input 
  */
 function fetchWeather(input) {
-
+  currentForecastCard.html('');
+  weekForecastCard.html('');
+  locationDisEle.html('');
+  locationDisEle.text(input);
   let URL = "https://api.openweathermap.org/data/2.5/weather?q=" + input + "&appid=" + APIKey;
 
     fetch(URL)
