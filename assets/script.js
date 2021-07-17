@@ -7,14 +7,16 @@ var historyEle = $('#history');
 var searchBtn = $('#search-button');
 var searchHistory = [];
 var userInput;
-
+/**
+ * when app loads get the search history
+ */
 window.addEventListener('DOMContentLoaded', (event) => {
 
   getSearchHistory();
 });
 
 
-
+//this gets the UV
 function helperFetchUVImg (getUVURL) {
   fetch (getUVURL)
     .then(function (response) {
@@ -30,14 +32,14 @@ function helperFetchUVImg (getUVURL) {
  * event listener for submit button
  */
 searchBtn.on("click", function(event) {
-  //historyEle.html('');
+
   getSearchHistory();
   currentForecastCard.html('');
   weekForecastCard.html('');
   event.preventDefault();
   userInput = userInputEle.val();
   console.log('userInput==>'+userInput);
-  //getWeather(userInput);
+
   fetchWeather(userInput);
   saveSearch(userInput);
   getSearchHistory();
@@ -62,7 +64,7 @@ function getSearchHistory (input) {
       historyValue.on("click",function(event) {
         
         event.preventDefault();
-        console.log('userInputStoredInHistory==>'+val);
+
         fetchWeather(val);
 
       });
@@ -74,6 +76,7 @@ function getSearchHistory (input) {
     }
   
   } else {
+    //if no search history create an empty array
     var searchHistory = [];
     return;
   }
@@ -81,9 +84,9 @@ function getSearchHistory (input) {
 }
 
 function saveSearch(input) {
-  console.log('searchhistoryB4==>'+searchHistory);
+
   searchHistory.push(input);
-  console.log('searchhistoryAFTER==>'+searchHistory);
+
   // Use .setItem() to store object in storage and JSON.stringify to convert it as a string
   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 }
@@ -119,12 +122,13 @@ function render(data, dataType, target, text) {
 
   switch(dataType) {
     case 'stats':
-      ele = $('<h3>').text(`${text}: `+ data);
+      ele = $('<h3>').text(`${text}: `+ data); //the text will serve as a description of the data displayed
       target.append(ele);
     case 'img' :
       var weatherImgEle = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + data + "@2x.png");
       target.append(weatherImgEle);
       break;
+    //made seperate case for date from stats because of the special format the date has to be in
     case 'date':
       var dateText = moment.unix(data).format('dddd MMM Do');
       console.log("date==>"+dateText);
@@ -135,7 +139,7 @@ function render(data, dataType, target, text) {
     case 'history':
 
       break;
-
+      
       case 'uv':
       if (data < 5) {
         target.append($('<h3>').text(`${text}: `+ data).addClass('low'));
@@ -166,7 +170,7 @@ function fetchWeather(input) {
       
       // Sets the API call url to the variable oneCallUrl in order to get the weather data for the searched city
       var URL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + data.coord.lat + "&lon=" + data.coord.lat + "&appid=" + APIKey + "&units=imperial";
-      
+
       fetch(URL)
         
           .then(response => response.json())

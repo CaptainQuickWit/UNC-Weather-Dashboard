@@ -11,10 +11,10 @@
     <title>Weather Dashboard</title>
 </head>
 
-<!-- Using bootstrap elements to match example -->
+
 <body>
 
-
+    <!-- header is a jumbotron-->
     <header class="jumbotron jumbotron-fluid d-flex justify-content-center"><h1>The UNC Weather Dashboard!</h1></header>
 
     <div class="cointainer-fluid">
@@ -23,7 +23,7 @@
             <div class = "d-flex justify-content-center">
                 
             </div>
-            <h2 class = "d-flex justify-content-center">Weather Report for a city</h2>
+            <h2 class = "d-flex justify-content-center">Weather Report for a city</h2> <!-- this servers to search for a city and displays the history of previous searches-->
               <div class="row">
                 <div class="col-12 col-sm-6">
                   <label for="city-search">SearchCity:</label>
@@ -34,17 +34,17 @@
               <button class="btn btn-primary" id="search-button">
                   Enter
               </button>
-      
-              <div id = "history"></div>
-        </section> <!-- search section-->
-      
+              <!--search history rendered here -->
+              <div id = "history"></div> 
+        </section> 
+        <!-- todays forecast-->
         <section class = "corners col-7" id="current"><h1 class="d-flex justify-content-center">Current Weather Forecast</h1></section>
 
     </div>
     
     </div>
     
-    <!-- <section class = "" id="current"></section> -->
+    <!-- rest of the weeks forecast will be dynamically rendered here-->
     <section class ="d-flex flex-row " id="weekForecast"></section>
     
 
