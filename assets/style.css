@@ -1,4 +1,13 @@
+.hover:hover {
+  color: green;
+}
 
+.low {
+  color: green;
+}
+.moderate {
+  color: orange;
+}
 .high {
-  color: rgb(255, 38, 0);
+  color: red;
 }

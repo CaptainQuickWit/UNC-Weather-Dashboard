@@ -9,12 +9,7 @@ var searchHistory = [];
 var userInput;
 
 window.addEventListener('DOMContentLoaded', (event) => {
-  /*
-  if (localStorage.getItem("history")){
-    let history = JSON.parse(localStorage.getItem("history"));
-  } else {
-    let history = [];
-  }*/
+
   getSearchHistory();
 });
 
@@ -35,33 +30,60 @@ function helperFetchUVImg (getUVURL) {
  * event listener for submit button
  */
 searchBtn.on("click", function(event) {
+  //historyEle.html('');
+  getSearchHistory();
+  currentForecastCard.html('');
+  weekForecastCard.html('');
   event.preventDefault();
   userInput = userInputEle.val();
   console.log('userInput==>'+userInput);
   //getWeather(userInput);
-  fetchWeather('raleigh');
+  fetchWeather(userInput);
   saveSearch(userInput);
   getSearchHistory();
+  
 });
 
 function getSearchHistory (input) {
-  var search = JSON.parse(localStorage.getItem("searchHistory"));
+  var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+  historyEle.html('');
   // Check if data is returned, if not exit out of the function
-  if (search !== null) {
-    for (var i = 0; i < search.length; i++) {
-      historyEle.append($('<p>').text(search[i]));
+  if (searchHistory !== null) {
+
+    var historyValue
+    var storedUserInput;
+    var val;
+
+    for (var i = 0; i < searchHistory.length; i++) {
+      val = searchHistory[i];
+      historyValue = $('<p>').text(val);
+      historyValue.addClass('hover'); //when hovering mouse it will turn green
+
+      historyValue.on("click",function(event) {
+        
+        event.preventDefault();
+        console.log('userInputStoredInHistory==>'+val);
+        fetchWeather(val);
+
+      });
+
+      historyEle.append(historyValue);
+
+
 
     }
   
   } else {
+    var searchHistory = [];
     return;
   }
 
 }
 
 function saveSearch(input) {
+  console.log('searchhistoryB4==>'+searchHistory);
   searchHistory.push(input);
-  console.log(searchHistory);
+  console.log('searchhistoryAFTER==>'+searchHistory);
   // Use .setItem() to store object in storage and JSON.stringify to convert it as a string
   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 }
@@ -112,6 +134,8 @@ function render(data, dataType, target, text) {
     break;
     case 'history':
 
+      
+      /*
       for (let i = 0; i < searchHistory.length; i++) {
         const historyItem = document.createElement("input");
         historyItem.setAttribute("type", "text");
@@ -122,7 +146,7 @@ function render(data, dataType, target, text) {
             getWeather(historyItem.value);
         })
         historyEl.append(historyItem);
-    }
+    }*/
       
       break;
 
