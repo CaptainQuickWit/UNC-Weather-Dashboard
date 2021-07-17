@@ -134,20 +134,6 @@ function render(data, dataType, target, text) {
     break;
     case 'history':
 
-      
-      /*
-      for (let i = 0; i < searchHistory.length; i++) {
-        const historyItem = document.createElement("input");
-        historyItem.setAttribute("type", "text");
-        historyItem.setAttribute("readonly", true);
-        historyItem.setAttribute("class", "form-control d-block bg-white");
-        historyItem.setAttribute("value", searchHistory[i]);
-        historyItem.addEventListener("click", function () {
-            getWeather(historyItem.value);
-        })
-        historyEl.append(historyItem);
-    }*/
-      
       break;
 
       case 'uv':
@@ -180,7 +166,7 @@ function fetchWeather(input) {
       
       // Sets the API call url to the variable oneCallUrl in order to get the weather data for the searched city
       var URL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + data.coord.lat + "&lon=" + data.coord.lat + "&appid=" + APIKey + "&units=imperial";
-
+      
       fetch(URL)
         
           .then(response => response.json())
@@ -201,7 +187,7 @@ function fetchWeather(input) {
 
           for (var i = 1; i < 6; i++) {
 
-            var weekForecastCardDayOfCard = $('<div class = container style = "border: 5px solid red;">');
+            var weekForecastCardDayOfCard = $('<div class = "container corners">');
             var weatherObj = fetchData(data,i);
             let {date,tempHi,tempLo,humidity,wind,uvi,weatherImg,windSpeed} = weatherObj;
 

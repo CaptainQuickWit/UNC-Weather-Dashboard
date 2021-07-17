@@ -15,28 +15,38 @@
 <body>
 
 
-    <header>Dashboard</header>
+    <header class="jumbotron jumbotron-fluid d-flex justify-content-center"><h1>The UNC Weather Dashboard!</h1></header>
 
-    <section class = "search container-fluid">
-      <h2>Search for a City:</h2>
-        <div class="row">
-          <div class="col-12 col-sm-6">
-            <label for="city-search">Search for a City:</label>
-            <input type="text" class="form-input" name="city-search"/>
-          </div>
-        </div>
+    <div class="cointainer-fluid">
+    <div class="row">
+        <section class = "search corners col-4 ">
+            <div class = "d-flex justify-content-center">
+                
+            </div>
+            <h2 class = "d-flex justify-content-center">Weather Report for a city</h2>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="city-search">SearchCity:</label>
+                  <input type="text" class="form-input" name="city-search"/>
+                </div>
+              </div>
+      
+              <button class="btn btn-primary" id="search-button">
+                  Enter
+              </button>
+      
+              <div id = "history"></div>
+        </section> <!-- search section-->
+      
+        <section class = "corners col-7" id="current"><h1 class="d-flex justify-content-center">Current Weather Forecast</h1></section>
 
-        <button class="btn btn-primary" type="button" id="search-button">
-          <!--    <i class="fas fa-search"></i>     -->
-        </button>
-
-        <div id = "history"></div>
-    </section> <!-- search section-->
+    </div>
     
-    <main>
-      <section class = "" id="current"></section>
-      <section class ="" id="weekForecast"></section>
-    </main>
+    </div>
+    
+    <!-- <section class = "" id="current"></section> -->
+    <section class ="d-flex flex-row " id="weekForecast"></section>
+    
 
 
   
